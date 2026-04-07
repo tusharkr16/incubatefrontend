@@ -86,6 +86,7 @@ function generateCohortPoster(cohort: {
   sectors?: string[];
   applicationDeadline?: string;
   maxStartups?: number;
+  description?: string;
 }): string {
   const W = 1200, H = 800;
   const canvas = document.createElement('canvas');

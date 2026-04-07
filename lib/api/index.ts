@@ -33,6 +33,8 @@ export const financialsApi = {
     apiClient.get(`/financials/startup/${startupId}`),
   getSummary: (startupId: string) =>
     apiClient.get(`/financials/startup/${startupId}/summary`),
+  getFundedStartups: () =>
+    apiClient.get('/financials/funded-startups'),
 };
 
 export const foundersApi = {
