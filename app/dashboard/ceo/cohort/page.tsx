@@ -364,7 +364,7 @@ export default function CohortReportPage() {
       // ── Generate AI poster via backend (Pollinations free / DALL·E if key set) ──
       setPosterLoading(true);
       try {
-        const aiRes = await cohortsApi.generatePoster({
+        const aiRes = await cohortsApi.generatePoster(cohort._id, {
           name: cohort.name,
           year: cohort.year,
           tagline: cohort.tagline,
