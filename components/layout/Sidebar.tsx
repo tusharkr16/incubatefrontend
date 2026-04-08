@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import {
   LayoutDashboard, Building2, Users, Star, TrendingUp,
-  FileText, DollarSign, ShieldCheck, Zap, LogOut, Users2,
+  FileText, DollarSign, ShieldCheck, Zap, LogOut, Users2, Layers,
 } from 'lucide-react';
 import { useAuthStore } from '@/lib/store/auth.store';
 
@@ -14,11 +14,12 @@ const navByRole: Record<string, Array<{ label: string; href: string; icon: React
     { label: 'Startups', href: '/dashboard/ceo/startups', icon: <Building2 size={16} /> },
     { label: 'Leaderboard', href: '/dashboard/ceo/leaderboard', icon: <TrendingUp size={16} /> },
     { label: 'Cohort Report', href: '/dashboard/ceo/cohort', icon: <Zap size={16} /> },
+    { label: 'Investor Interests', href: '/dashboard/ceo/investor-interests', icon: <DollarSign size={16} /> },
     { label: 'Audit Logs', href: '/dashboard/ceo/audit', icon: <ShieldCheck size={16} /> },
   ],
   founder: [
     { label: 'My Startups', href: '/dashboard/founder', icon: <Building2 size={16} /> },
-    { label: 'Investor Interest', href: '/dashboard/founder/milestones', icon: <Users2 size={16} /> },
+    { label: 'Investor Interest', href: '/dashboard/founder/investor-interest', icon: <Users2 size={16} /> },
     { label: 'Documents', href: '/dashboard/founder/documents', icon: <FileText size={16} /> },
     { label: 'My Score', href: '/dashboard/founder/score', icon: <Star size={16} /> },
   ],
@@ -27,11 +28,13 @@ const navByRole: Record<string, Array<{ label: string; href: string; icon: React
     { label: 'Evaluate', href: '/dashboard/investor/evaluate', icon: <Star size={16} /> },
   ],
   admin: [
-    { label: 'Overview', href: '/dashboard/ceo', icon: <LayoutDashboard size={16} /> },
-    { label: 'Users', href: '/dashboard/admin/users', icon: <Users size={16} /> },
-    { label: 'Startups', href: '/dashboard/ceo/startups', icon: <Building2 size={16} /> },
-    { label: 'Financials', href: '/dashboard/admin/financials', icon: <DollarSign size={16} /> },
-    { label: 'Audit Logs', href: '/dashboard/ceo/audit', icon: <ShieldCheck size={16} /> },
+    { label: 'Overview',          href: '/dashboard/ceo',                    icon: <LayoutDashboard size={16} /> },
+    { label: 'Users',             href: '/dashboard/admin/users',             icon: <Users size={16} /> },
+    { label: 'Cohorts',           href: '/dashboard/admin/cohorts',           icon: <Layers size={16} /> },
+    { label: 'Startups',          href: '/dashboard/ceo/startups',            icon: <Building2 size={16} /> },
+    { label: 'Financials',        href: '/dashboard/admin/financials',        icon: <DollarSign size={16} /> },
+    { label: 'Investor Interests',href: '/dashboard/ceo/investor-interests',  icon: <TrendingUp size={16} /> },
+    { label: 'Audit Logs',        href: '/dashboard/ceo/audit',               icon: <ShieldCheck size={16} /> },
   ],
   finance: [
     { label: 'Disbursements', href: '/dashboard/finance', icon: <DollarSign size={16} /> },
