@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   ArrowRight, Play, Zap, BarChart2, Users, Shield,
-  TrendingUp, CheckCircle, Star, Building2, Globe, Brain, Layers, ChevronDown,
+  TrendingUp, CheckCircle, Star, Building2, Globe, Brain, Layers, ChevronDown, Quote,
 } from 'lucide-react';
 import { LandingNav } from '@/components/LandingNav';
 
@@ -350,6 +350,86 @@ const _FEATURES = [
 ];
 void _FEATURES; // silence unused warning
 
+const FOUNDER_QUICK_STATS = [
+  { value: '10+',    label: 'Years' },
+  { value: '100+',   label: 'Startups' },
+  { value: '₹20Cr+', label: 'Funding' },
+  { value: '135+',   label: 'Programmes' },
+];
+
+function FounderTeaser() {
+  return (
+    <section className="bg-[#0f0f0f] border-t border-white/8 py-20 px-8 overflow-hidden relative">
+      <div className="absolute right-0 top-0 w-[400px] h-full bg-gradient-to-l from-violet-900/15 to-transparent pointer-events-none" />
+      <div className="max-w-7xl mx-auto relative">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
+
+            {/* Left — identity */}
+            <div className="flex-shrink-0 flex flex-col items-center gap-4 text-center">
+              <div className="w-28 h-28 rounded-2xl overflow-hidden shadow-xl shadow-violet-900/50 ring-2 ring-violet-500/30">
+                <Image
+                  src="/founder-anurag.png"
+                  alt="Anurag Pandey"
+                  width={112}
+                  height={112}
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+              <div>
+                <p className="text-white font-black text-xl leading-tight">Anurag Pandey</p>
+                <p className="text-[#ff5c35] text-xs font-bold tracking-widest uppercase mt-1">Founder & CEO</p>
+              </div>
+              <div className="flex gap-2 flex-wrap justify-center">
+                {FOUNDER_QUICK_STATS.map((s) => (
+                  <div key={s.label} className="bg-white/5 border border-white/8 rounded-xl px-3 py-2 text-center min-w-[56px]">
+                    <p className="text-sm font-black text-white">{s.value}</p>
+                    <p className="text-[10px] text-slate-500 mt-0.5">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right — story */}
+            <div className="flex-1 space-y-5">
+              <p className="text-xs font-bold tracking-[0.22em] text-slate-500 uppercase">The Founder</p>
+
+              <div className="relative">
+                <Quote size={28} className="text-violet-600/40 absolute -top-1 -left-1" />
+                <blockquote className="text-lg lg:text-xl font-semibold text-white/80 leading-relaxed pl-6 italic">
+                  Incubatx was built to be a trend catcher ecosystem builder — bridging startups,
+                  investors, and incubators through standardized frameworks and democratized access.
+                </blockquote>
+              </div>
+
+              <p className="text-slate-400 text-sm leading-relaxed">
+                With 10+ years across design, product, and incubation — collaborating with Samsung, Canon, and
+                Mahindra, engaging with NITI Aayog, and leading Sharda Launchpad (DST-supported TBI) — Anurag
+                Pandey built IncubatX from the ground up, out of lived frustration with the ecosystem&apos;s gaps.
+              </p>
+
+              <div className="flex flex-wrap gap-2">
+                {['Samsung', 'Canon', 'NITI Aayog', 'DST Govt. of India', 'Sharda Launchpad'].map((b) => (
+                  <span key={b} className="text-xs text-white/50 border border-white/10 bg-white/5 px-3 py-1 rounded-full">
+                    {b}
+                  </span>
+                ))}
+              </div>
+
+              <Link
+                href="/about"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-violet-400 hover:text-violet-300 transition-colors"
+              >
+                Read the full story <ArrowRight size={13} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Footer() {
   return (
     <footer className="bg-black border-t border-white/10 py-12 px-8">
@@ -398,6 +478,7 @@ export default function LandingPage() {
       <AIIntelligenceSection />
       <EnterpriseSection />
       <TestimonialsSection />
+      <FounderTeaser />
       <Footer />
     </div>
   );

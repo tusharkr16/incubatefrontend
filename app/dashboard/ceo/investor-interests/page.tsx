@@ -9,6 +9,7 @@ import { fundingInterestsApi } from '@/lib/api';
 import {
   DollarSign, Users, CheckCircle, Clock, XCircle,
   Building2, TrendingUp, ChevronDown, ChevronRight, Search,
+  Phone, Link2, ExternalLink, PauseCircle, HelpCircle, MessageSquare,
 } from 'lucide-react';
 import { clsx } from 'clsx';
 
@@ -20,9 +21,11 @@ function fmtAmount(n: number) {
 }
 
 const STATUS_META: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  pending:  { label: 'Pending',  color: 'text-amber-600 bg-amber-50 border-amber-200',       icon: <Clock size={11} /> },
-  accepted: { label: 'Accepted', color: 'text-emerald-600 bg-emerald-50 border-emerald-200', icon: <CheckCircle size={11} /> },
-  rejected: { label: 'Rejected', color: 'text-red-500 bg-red-50 border-red-200',             icon: <XCircle size={11} /> },
+  pending:  { label: 'Pending',        color: 'text-amber-600 bg-amber-50 border-amber-200',       icon: <Clock size={11} /> },
+  accepted: { label: 'Accepted',       color: 'text-emerald-600 bg-emerald-50 border-emerald-200', icon: <CheckCircle size={11} /> },
+  rejected: { label: 'Rejected',       color: 'text-red-500 bg-red-50 border-red-200',             icon: <XCircle size={11} /> },
+  hold:     { label: 'On Hold',        color: 'text-blue-600 bg-blue-50 border-blue-200',          icon: <PauseCircle size={11} /> },
+  enquire:  { label: 'Under Enquiry',  color: 'text-violet-600 bg-violet-50 border-violet-200',    icon: <HelpCircle size={11} /> },
 };
 
 const STATUS_VARIANT: Record<string, any> = {
@@ -212,8 +215,30 @@ export default function CeoInvestorInterestsPage() {
                                       </span>
                                     </div>
                                     <p className="text-lg font-bold text-violet-700 mt-0.5">{fmtAmount(interest.amount)}</p>
+
+                                    {/* Contact details */}
+                                    {(interest.phone || interest.contactUrl) && (
+                                      <div className="flex flex-wrap items-center gap-3 mt-1.5 text-xs text-slate-500">
+                                        {interest.phone && (
+                                          <a href={`tel:${interest.phone}`} className="flex items-center gap-1 hover:text-violet-600">
+                                            <Phone size={10} /> {interest.phone}
+                                          </a>
+                                        )}
+                                        {interest.contactUrl && (
+                                          <a href={interest.contactUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-violet-600">
+                                            <Link2 size={10} />
+                                            {interest.contactUrl.replace(/^https?:\/\/(www\.)?/, '').split('/').slice(0, 2).join('/')}
+                                            <ExternalLink size={8} />
+                                          </a>
+                                        )}
+                                      </div>
+                                    )}
+
                                     {interest.message && (
-                                      <p className="text-xs text-slate-500 mt-1 leading-relaxed">{interest.message}</p>
+                                      <div className="flex items-start gap-1.5 mt-2 bg-white rounded-lg px-2.5 py-2 border border-slate-100">
+                                        <MessageSquare size={11} className="text-slate-400 mt-0.5 flex-shrink-0" />
+                                        <p className="text-xs text-slate-500 leading-relaxed">{interest.message}</p>
+                                      </div>
                                     )}
                                     {interest.createdAt && (
                                       <p className="text-xs text-slate-400 mt-1">

@@ -15,8 +15,9 @@ import { intelligenceApi } from '@/lib/api/startups';
 import {
   ArrowLeft, Building2, Globe, Calendar, Link2,
   Users, IndianRupee, Landmark, Hash, TrendingUp,
-  Zap, CheckCircle, Pencil, FileText,
+  Zap, CheckCircle, Pencil, FileText, BarChart2,
 } from 'lucide-react';
+import { BudgetSection } from '@/components/startups/BudgetSection';
 import { clsx } from 'clsx';
 
 // ── constants ──────────────────────────────────────────────────────────────
@@ -465,6 +466,17 @@ export default function StartupDetailPage({ params }: { params: Promise<{ id: st
           </div>
         </div>
       </div>
+
+      {/* Budget Tracker */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <BarChart2 size={16} className="text-violet-500" />
+            <CardTitle>Budget Tracker</CardTitle>
+          </div>
+        </CardHeader>
+        <BudgetSection startupId={id} />
+      </Card>
 
       {/* ── Edit Startup Modal ────────────────────────────────────────── */}
       <Modal open={editStartup} onClose={() => setEditStartup(false)} title="Edit Startup Details" size="lg">

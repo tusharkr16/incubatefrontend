@@ -14,9 +14,10 @@ import { milestonesApi, financialsApi, foundersApi, evaluationsApi, documentsApi
 import apiClient from '@/lib/api/client';
 import {
   ArrowLeft, User, Target, DollarSign, Star, Zap,
-  CheckCircle, Clock, AlertCircle, Plus, Flag, FileText,
+  CheckCircle, Clock, AlertCircle, Plus, Flag, FileText, BarChart2,
 } from 'lucide-react';
 import { clsx } from 'clsx';
+import { BudgetSection } from '@/components/startups/BudgetSection';
 
 // ─── types ────────────────────────────────────────────────
 type ModalType = 'founder' | 'milestone' | 'financial' | 'document' | 'milestone_update' | 'flag' | null;
@@ -388,6 +389,17 @@ export default function StartupDetailPage() {
           </Card>
         </div>
       </div>
+
+      {/* Budget Tracker */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <BarChart2 size={16} className="text-violet-500" />
+            <CardTitle>Budget Tracker</CardTitle>
+          </div>
+        </CardHeader>
+        <BudgetSection startupId={id} />
+      </Card>
 
       {/* ── Add Founder Modal ── */}
       <Modal open={modal === 'founder'} onClose={() => setModal(null)} title="Add Founder">

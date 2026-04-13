@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import {
   LayoutDashboard, Building2, Users, Star, TrendingUp,
-  FileText, DollarSign, ShieldCheck, Zap, LogOut, Users2, Layers,
+  FileText, DollarSign, ShieldCheck, Zap, LogOut, Users2, Layers, Award,
 } from 'lucide-react';
 import { useAuthStore } from '@/lib/store/auth.store';
 
@@ -16,12 +16,14 @@ const navByRole: Record<string, Array<{ label: string; href: string; icon: React
     { label: 'Cohort Report', href: '/dashboard/ceo/cohort', icon: <Zap size={16} /> },
     { label: 'Investor Interests', href: '/dashboard/ceo/investor-interests', icon: <DollarSign size={16} /> },
     { label: 'Audit Logs', href: '/dashboard/ceo/audit', icon: <ShieldCheck size={16} /> },
+    { label: 'IncubatxGrants', href: '/dashboard/grants', icon: <Award size={16} /> },
   ],
   founder: [
     { label: 'My Startups', href: '/dashboard/founder', icon: <Building2 size={16} /> },
     { label: 'Investor Interest', href: '/dashboard/founder/investor-interest', icon: <Users2 size={16} /> },
     { label: 'Documents', href: '/dashboard/founder/documents', icon: <FileText size={16} /> },
     { label: 'My Score', href: '/dashboard/founder/score', icon: <Star size={16} /> },
+    { label: 'IncubatxGrants', href: '/dashboard/grants', icon: <Award size={16} /> },
   ],
   investor: [
     { label: 'Portfolio', href: '/dashboard/investor', icon: <LayoutDashboard size={16} /> },
@@ -35,10 +37,16 @@ const navByRole: Record<string, Array<{ label: string; href: string; icon: React
     { label: 'Financials',        href: '/dashboard/admin/financials',        icon: <DollarSign size={16} /> },
     { label: 'Investor Interests',href: '/dashboard/ceo/investor-interests',  icon: <TrendingUp size={16} /> },
     { label: 'Audit Logs',        href: '/dashboard/ceo/audit',               icon: <ShieldCheck size={16} /> },
+    { label: 'IncubatxGrants',    href: '/dashboard/grants',                  icon: <Award size={16} /> },
   ],
   finance: [
     { label: 'Disbursements', href: '/dashboard/finance', icon: <DollarSign size={16} /> },
     { label: 'Documents', href: '/dashboard/finance/documents', icon: <FileText size={16} /> },
+  ],
+  account_manager: [
+    { label: 'My Startups', href: '/dashboard/account-manager', icon: <Building2 size={16} /> },
+    { label: 'Reviews & Insights', href: '/dashboard/account-manager/reviews', icon: <Star size={16} /> },
+    { label: 'IncubatxGrants', href: '/dashboard/grants', icon: <Award size={16} /> },
   ],
 };
 

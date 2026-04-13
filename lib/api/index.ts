@@ -62,9 +62,37 @@ export const documentsApi = {
     apiClient.get(`/documents/startup/${startupId}`),
 };
 
+export const grantsApi = {
+  apply: (data: { startupId: string; grantId: string; grantName: string }) =>
+    apiClient.post('/grants', data),
+  getByStartup: (startupId: string) =>
+    apiClient.get(`/grants/startup/${startupId}`),
+  update: (id: string, data: { status?: string; steps?: Array<{ label: string; completed: boolean }>; notes?: string }) =>
+    apiClient.patch(`/grants/${id}`, data),
+};
+
+export const accountManagerApi = {
+  getStartupAM: (startupId: string) =>
+    apiClient.get(`/account-manager/startup/${startupId}`),
+  getStartupReviews: (startupId: string) =>
+    apiClient.get(`/account-manager/reviews/startup/${startupId}`),
+  getMyStartups: () =>
+    apiClient.get('/account-manager/my-startups'),
+  getMyReviews: () =>
+    apiClient.get('/account-manager/reviews/my'),
+  createReview: (data: { startupId: string; category: string; content: string; rating?: number; visibleToFounder?: boolean }) =>
+    apiClient.post('/account-manager/reviews', data),
+  deleteReview: (id: string) =>
+    apiClient.delete(`/account-manager/reviews/${id}`),
+  assign: (data: { startupId: string; accountManagerId: string; notes?: string }) =>
+    apiClient.post('/account-manager/assign', data),
+  getAllAssignments: () =>
+    apiClient.get('/account-manager/assignments'),
+};
+
 export const fundingInterestsApi = {
   /** Express or update funding interest in a startup */
-  create: (data: { startupId: string; amount: number; currency?: string; message?: string }) =>
+  create: (data: { startupId: string; amount: number; currency?: string; message?: string; phone?: string; contactUrl?: string }) =>
     apiClient.post('/funding-interests', data),
   /** Aggregated summary per startup (evaluate page) */
   getSummary: () =>
@@ -78,4 +106,29 @@ export const fundingInterestsApi = {
   /** Accept / reject an interest */
   updateStatus: (id: string, status: 'pending' | 'accepted' | 'rejected') =>
     apiClient.patch(`/funding-interests/${id}/status`, { status }),
+};
+
+export const budgetApi = {
+  getByStartup: (startupId: string) =>
+    apiClient.get(`/budget/startup/${startupId}`),
+  getSummary: (startupId: string) =>
+    apiClient.get(`/budget/startup/${startupId}/summary`),
+  upsert: (
+    startupId: string,
+    itemKey: string,
+    data: {
+      category: string;
+      year: number;
+      description: string;
+      budgetAmount?: number;
+      spentAmount?: number;
+      comment?: string;
+    },
+  ) => apiClient.put(`/budget/startup/${startupId}/${itemKey}`, data),
+  uploadInvoice: (startupId: string, itemKey: string, base64: string, fileName: string) =>
+    apiClient.post(`/budget/startup/${startupId}/${itemKey}/invoice`, { base64, fileName }),
+  removeInvoice: (startupId: string, itemKey: string) =>
+    apiClient.delete(`/budget/startup/${startupId}/${itemKey}/invoice`),
+  deleteEntry: (startupId: string, itemKey: string) =>
+    apiClient.delete(`/budget/startup/${startupId}/${itemKey}`),
 };

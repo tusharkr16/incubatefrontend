@@ -11,8 +11,10 @@ import { Button } from '@/components/ui/Button';
 import apiClient from '@/lib/api/client';
 import { useAuthStore } from '@/lib/store/auth.store';
 import Link from 'next/link';
-import { Plus, Building2, Globe, Calendar, ArrowRight } from 'lucide-react';
+import { Plus, Building2, Globe, Calendar, ArrowRight, Award, UserCheck, MessageSquare, CheckCircle2, Circle } from 'lucide-react';
 import { clsx } from 'clsx';
+import { grantsApi, accountManagerApi } from '@/lib/api';
+import { GRANT_STATUS_COLORS, GRANT_STATUS_LABELS } from '@/lib/data/grants';
 
 // ── constants ──────────────────────────────────────────────────────────────
 
@@ -177,6 +179,16 @@ export default function FounderDashboard() {
         )}
       </div>
 
+      {/* ── Grant Applications ───────────────────────────────────────── */}
+      {startups.length > 0 && (
+        <GrantProgressSection startupIds={startups.map((s: any) => s._id)} startupNames={startups.reduce((m: any, s: any) => { m[s._id] = s.name; return m; }, {})} />
+      )}
+
+      {/* ── Account Manager ──────────────────────────────────────────── */}
+      {startups.length > 0 && (
+        <AccountManagerSection startupIds={startups.map((s: any) => s._id)} />
+      )}
+
       {/* ── Add Startup Modal ────────────────────────────────────────── */}
       <Modal open={showForm} onClose={closeForm} title="Register New Startup" size="lg">
         <form onSubmit={handleSubmit}>
@@ -328,6 +340,159 @@ function Section({ label, children }: { label: string; children: React.ReactNode
 
 function TwoCol({ children }: { children: React.ReactNode }) {
   return <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{children}</div>;
+}
+
+// ── Grant Progress Section ───────────────────────────────────────────────────
+
+function GrantProgressSection({ startupIds, startupNames }: { startupIds: string[]; startupNames: Record<string, string> }) {
+  const queries = startupIds.map((id) => ({
+    queryKey: ['grant-applications', id],
+    queryFn: () => grantsApi.getByStartup(id).then((r) => r.data as any[]),
+  }));
+
+  const allApps: Array<any & { startupName: string }> = [];
+  startupIds.forEach((id) => {
+    const { data } = useQuery({ queryKey: ['grant-applications', id], queryFn: () => grantsApi.getByStartup(id).then((r) => r.data as any[]) });
+    (data ?? []).forEach((app: any) => allApps.push({ ...app, startupName: startupNames[id] }));
+  });
+
+  if (allApps.length === 0) {
+    return (
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <Award size={18} className="text-violet-600" /> Grant Applications
+          </h2>
+          <Link href="/dashboard/grants" className="text-xs text-violet-600 font-semibold hover:underline flex items-center gap-1">
+            Browse grants <ArrowRight size={12} />
+          </Link>
+        </div>
+        <div className="bg-violet-50 border border-violet-100 rounded-xl p-6 flex items-center justify-between gap-4">
+          <div>
+            <p className="font-semibold text-violet-900 text-sm">No grant applications yet</p>
+            <p className="text-violet-600 text-xs mt-0.5">Explore government grants and start tracking your applications.</p>
+          </div>
+          <Link href="/dashboard/grants" className="flex-shrink-0 bg-violet-600 text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-violet-700 transition-colors">
+            Explore Grants
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <Award size={18} className="text-violet-600" /> Grant Applications
+        </h2>
+        <Link href="/dashboard/grants" className="text-xs text-violet-600 font-semibold hover:underline flex items-center gap-1">
+          Browse more <ArrowRight size={12} />
+        </Link>
+      </div>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {allApps.map((app: any) => {
+          const completed = app.steps?.filter((s: any) => s.completed).length ?? 0;
+          const total = app.steps?.length ?? 0;
+          const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+          return (
+            <Link key={app._id} href={`/dashboard/grants/${app.grantId}`}>
+              <div className="bg-white border border-slate-200 rounded-xl p-4 hover:shadow-md hover:border-violet-200 transition-all cursor-pointer">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <p className="font-semibold text-sm text-slate-900 leading-tight line-clamp-2">{app.grantName}</p>
+                  <span className={`flex-shrink-0 text-xs font-bold px-2 py-0.5 rounded-full ${GRANT_STATUS_COLORS[app.status]}`}>
+                    {GRANT_STATUS_LABELS[app.status]}
+                  </span>
+                </div>
+                {startupIds.length > 1 && (
+                  <p className="text-xs text-slate-400 mb-2">{app.startupName}</p>
+                )}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between text-xs text-slate-500">
+                    <span>{completed}/{total} steps</span>
+                    <span className="font-semibold text-violet-600">{pct}%</span>
+                  </div>
+                  <div className="w-full bg-slate-100 rounded-full h-1.5">
+                    <div className="bg-violet-600 h-1.5 rounded-full transition-all" style={{ width: `${pct}%` }} />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Account Manager Section ───────────────────────────────────────────────────
+
+function AccountManagerSection({ startupIds }: { startupIds: string[] }) {
+  const startupId = startupIds[0];
+
+  const { data: assignment } = useQuery({
+    queryKey: ['startup-am', startupId],
+    queryFn: () => accountManagerApi.getStartupAM(startupId).then((r) => r.data as any),
+    enabled: !!startupId,
+  });
+
+  const { data: reviews = [] } = useQuery({
+    queryKey: ['am-reviews', startupId],
+    queryFn: () => accountManagerApi.getStartupReviews(startupId).then((r) => r.data as any[]),
+    enabled: !!startupId,
+  });
+
+  if (!assignment?.accountManagerId) return null;
+
+  const am = assignment.accountManagerId;
+
+  return (
+    <div>
+      <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+        <UserCheck size={18} className="text-violet-600" /> Your Account Manager
+      </h2>
+      <div className="grid sm:grid-cols-3 gap-5">
+        {/* AM Card */}
+        <div className="bg-white border border-slate-200 rounded-xl p-5 flex items-start gap-3 col-span-1">
+          <div className="w-11 h-11 rounded-full bg-violet-600 flex items-center justify-center text-white font-bold text-base flex-shrink-0">
+            {am.name?.[0]?.toUpperCase()}
+          </div>
+          <div>
+            <p className="font-bold text-slate-900">{am.name}</p>
+            <p className="text-xs text-slate-500">{am.email}</p>
+            <span className="mt-2 inline-block text-xs bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full font-semibold">
+              Account Manager
+            </span>
+          </div>
+        </div>
+
+        {/* Reviews */}
+        <div className="sm:col-span-2 space-y-3">
+          {reviews.length === 0 ? (
+            <div className="bg-slate-50 rounded-xl p-5 text-center text-slate-400 text-sm">
+              No reviews from your account manager yet.
+            </div>
+          ) : (
+            reviews.slice(0, 3).map((review: any) => (
+              <div key={review._id} className="bg-white border border-slate-200 rounded-xl p-4">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <div className="flex items-center gap-2">
+                    <MessageSquare size={13} className="text-violet-500" />
+                    <span className="text-xs font-bold text-violet-700 capitalize">{review.category}</span>
+                  </div>
+                  {review.rating && (
+                    <span className="text-xs font-bold text-slate-500">{review.rating}/10</span>
+                  )}
+                </div>
+                <p className="text-sm text-slate-700 leading-relaxed">{review.content}</p>
+                <p className="text-xs text-slate-400 mt-2">{new Date(review.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function StartupCard({ startup }: { startup: any }) {

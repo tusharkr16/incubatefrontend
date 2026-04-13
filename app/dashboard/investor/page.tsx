@@ -14,7 +14,7 @@ import { useAuthStore } from '@/lib/store/auth.store';
 import {
   Search, SlidersHorizontal, X, Building2, Globe,
   Calendar, ChevronDown, Star, DollarSign, TrendingUp,
-  ExternalLink, Users, CheckCircle, Info,
+  ExternalLink, Users, CheckCircle, Info, Phone, Link2,
 } from 'lucide-react';
 import { clsx } from 'clsx';
 
@@ -96,10 +96,12 @@ export default function InvestorDashboard() {
   const [detailTab, setDetailTab]         = useState<'info' | 'invest' | 'evaluate'>('info');
 
   // Funding interest form
-  const [fundAmount, setFundAmount]   = useState('');
-  const [fundMessage, setFundMessage] = useState('');
-  const [fundError, setFundError]     = useState('');
-  const [fundSuccess, setFundSuccess] = useState(false);
+  const [fundAmount, setFundAmount]       = useState('');
+  const [fundMessage, setFundMessage]     = useState('');
+  const [fundPhone, setFundPhone]         = useState('');
+  const [fundContactUrl, setFundContactUrl] = useState('');
+  const [fundError, setFundError]         = useState('');
+  const [fundSuccess, setFundSuccess]     = useState(false);
 
   // Evaluation form
   const [scores, setScores]               = useState<Record<ScoreKey, number>>(EMPTY_SCORES);
@@ -154,6 +156,8 @@ export default function InvestorDashboard() {
     setDetailTab('info');
     setFundAmount('');
     setFundMessage('');
+    setFundPhone('');
+    setFundContactUrl('');
     setFundError('');
     setFundSuccess(false);
     setScores(EMPTY_SCORES);
@@ -175,6 +179,8 @@ export default function InvestorDashboard() {
       startupId: detailStartup._id,
       amount: amt,
       message: fundMessage || undefined,
+      phone: fundPhone || undefined,
+      contactUrl: fundContactUrl || undefined,
     });
   }
 
@@ -460,9 +466,38 @@ export default function InvestorDashboard() {
                       )}
                     </div>
 
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5 block">
+                          <Phone size={13} className="text-slate-400" /> Phone
+                          <span className="text-slate-400 font-normal">(optional)</span>
+                        </label>
+                        <input
+                          type="tel"
+                          placeholder="+91 98765 43210"
+                          value={fundPhone}
+                          onChange={(e) => setFundPhone(e.target.value)}
+                          className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-300"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5 block">
+                          <Link2 size={13} className="text-slate-400" /> LinkedIn / Profile URL
+                          <span className="text-slate-400 font-normal">(optional)</span>
+                        </label>
+                        <input
+                          type="url"
+                          placeholder="https://linkedin.com/in/…"
+                          value={fundContactUrl}
+                          onChange={(e) => setFundContactUrl(e.target.value)}
+                          className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-300"
+                        />
+                      </div>
+                    </div>
+
                     <div>
                       <label className="text-sm font-medium text-slate-700 mb-1.5 block">
-                        Message <span className="text-slate-400 font-normal">(optional)</span>
+                        Note <span className="text-slate-400 font-normal">(optional)</span>
                       </label>
                       <textarea
                         placeholder="Why are you interested in this startup? Any conditions or milestones attached?"

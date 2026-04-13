@@ -18,6 +18,7 @@ const NAV_ITEMS = [
         'Analytics & Reporting',
         'Capital Access',
         'Marketplace',
+        'IncubatxGrants',
       ],
     },
   },
@@ -156,6 +157,32 @@ export function LandingNav({ activeHref }: { activeHref?: string }) {
           className="text-sm text-white/80 hover:text-white transition-colors"
         >
           Pricing
+        </Link>
+        <Link
+          href="/grants"
+          className={`text-sm transition-colors ${
+            activeHref === '/grants' ? 'text-violet-400 font-semibold' : 'text-white/80 hover:text-white'
+          }`}
+        >
+          IncubatxGrants
+        </Link>
+        <Link
+          href="/assessment"
+          className={`text-sm transition-colors ${
+            activeHref === '/assessment' ? 'text-white font-semibold' : 'text-white/80 hover:text-white'
+          }`}
+        >
+          Free Assessment
+        </Link>
+        <Link
+          href="/membership"
+          className={`text-sm transition-colors font-semibold ${
+            activeHref === '/membership'
+              ? 'text-amber-400'
+              : 'text-amber-400/80 hover:text-amber-400'
+          }`}
+        >
+          Membership
         </Link>
         <Link
           href="/about"
