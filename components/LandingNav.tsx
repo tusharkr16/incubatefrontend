@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
+import { BookDemoModal } from './BookDemoModal';
 
 // ── dropdown data ────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
@@ -127,8 +128,12 @@ function NavItem({
 
 // ── exported navbar ───────────────────────────────────────────────────────────
 export function LandingNav({ activeHref }: { activeHref?: string }) {
+  const [demoOpen, setDemoOpen] = useState(false);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 bg-black/30 backdrop-blur-md border-b border-white/10">
+    <>
+      <BookDemoModal isOpen={demoOpen} onClose={() => setDemoOpen(false)} />
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 bg-black/30 backdrop-blur-md border-b border-white/10">
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2 flex-shrink-0">
         <Image
@@ -199,13 +204,14 @@ export function LandingNav({ activeHref }: { activeHref?: string }) {
         <Link href="/login" className="text-sm text-white/80 hover:text-white transition-colors">
           Log In
         </Link>
-        <Link
-          href="/register"
+        <button
+          onClick={() => setDemoOpen(true)}
           className="flex items-center gap-2 text-sm font-semibold bg-[#ff5c35] hover:bg-[#e84e2a] text-white px-5 py-2 rounded-full transition-colors shadow-lg shadow-orange-600/30"
         >
           Book a Demo <ArrowRight size={14} />
-        </Link>
+        </button>
       </div>
     </nav>
+    </>
   );
 }

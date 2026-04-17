@@ -5,6 +5,7 @@ import {
   TrendingUp, CheckCircle, Star, Building2, Globe, Brain, Layers, ChevronDown, Quote,
 } from 'lucide-react';
 import { LandingNav } from '@/components/LandingNav';
+import { HeroBookDemoButton } from '@/components/HeroBookDemoButton';
 
 const BG =
   'https://res.cloudinary.com/du5fldub3/image/upload/w_1920,c_scale/app/6fb0582d-4dc5-4778-ac73-864d18c08f77/iter2/hero_gurgaon_twilight.png';
@@ -89,9 +90,7 @@ function Hero() {
               incubators, accelerators, universities and government programs.
             </p>
             <div className="flex flex-wrap items-center gap-4">
-              <Link href="/register" className="flex items-center gap-2 bg-[#ff5c35] hover:bg-[#e84e2a] text-white font-semibold px-7 py-3.5 rounded-full text-sm transition-all shadow-xl shadow-orange-600/30 hover:shadow-orange-600/50 hover:scale-[1.02]">
-                Book a Demo <ArrowRight size={15} />
-              </Link>
+              <HeroBookDemoButton />
               <Link href="/register" className="flex items-center gap-2 border border-white/30 hover:border-white/60 text-white font-semibold px-7 py-3.5 rounded-full text-sm transition-all hover:bg-white/10 backdrop-blur-sm">
                 Register Yourself
               </Link>
